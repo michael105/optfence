@@ -1,3 +1,5 @@
+#include "optfence.h"
+//void __attribute__((noipa,cold,naked)) optfence(void*p,...){}
 
-static void __attribute__((noipa,cold,naked)) opt_fence(void*p,...){}
-
+static int a,b;
+OPTFENCE(a,b);

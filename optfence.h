@@ -26,9 +26,14 @@
 //
 // (The needed function is given below)
 // static void __attribute__((noipa,cold,naked)) opt_fence(void*p,...){}
-#define _optjmp(a,b) asm( a "OPTFENCE_"#b )
-#define _optlabel(a) asm( "OPTFENCE_" #a ":" )
-#define __optfence(a,...) _optjmp("jmp ", a ); opt_fence(__VA_ARGS__); _optlabel(a)
-#define OPTFENCE(...) __optfence(__COUNTER__,__VA_ARGS__)
+//static void optfence(void*p,...);
+
+static void __attribute__((noipa,cold,naked)) optfence(void*p,...){}
+#define OPTFENCE(...) {\
+	asm volatile("jmp 1f");\
+	optfence(__VA_ARGS__);\
+	asm volatile("1:");\
+}
+
 #endif
 
